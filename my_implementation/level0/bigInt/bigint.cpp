@@ -27,8 +27,9 @@ bigint	&bigint::operator+=(const bigint &other)
 {
 	int	carry = 0;
 	int	i = _big.size() - 1;
+	
 	int	j = other._big.size() - 1;
-
+   
 	std::string	result;
 
 	while (i >= 0 || j >= 0 || carry)
