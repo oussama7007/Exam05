@@ -1,14 +1,9 @@
-
 #include "searchable_tree_bag.hpp"
 
-searchable_tree_bag::searchable_tree_bag() : tree_bag()
-{
-}
+searchable_tree_bag::searchable_tree_bag() : tree_bag() {}
 
 searchable_tree_bag::searchable_tree_bag(const searchable_tree_bag &other)
-	: tree_bag(other)
-{
-}
+	: tree_bag(other) {}
 
 searchable_tree_bag &searchable_tree_bag::operator=(const searchable_tree_bag &other)
 {
@@ -17,22 +12,18 @@ searchable_tree_bag &searchable_tree_bag::operator=(const searchable_tree_bag &o
 	return *this;
 }
 
-searchable_tree_bag::~searchable_tree_bag()
-{
-}
+searchable_tree_bag::~searchable_tree_bag() {}
 
 bool searchable_tree_bag::has(int value) const
 {
-	node *current = tree;
+	node *cur = tree;
 
-	while (current)
+	while (cur)
 	{
-		if (value == current->value)
+		if (value == cur->value)
 			return true;
-		else if (value < current->value)
-			current = current->l;
-		else
-			current = current->r;
+
+		cur = (value < cur->value) ? cur->l : cur->r;
 	}
 	return false;
 }

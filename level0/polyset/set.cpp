@@ -1,17 +1,10 @@
-
 #include "set.hpp"
 
-set::set() : _bag(0)
-{
-}
+set::set() : _bag(0) {}
 
-set::set(searchable_bag &bag) : _bag(&bag)
-{
-}
+set::set(searchable_bag &bag) : _bag(&bag) {}
 
-set::set(const set &other) : _bag(other._bag)
-{
-}
+set::set(const set &other) : _bag(other._bag) {}
 
 set &set::operator=(const set &other)
 {
@@ -20,9 +13,7 @@ set &set::operator=(const set &other)
 	return *this;
 }
 
-set::~set()
-{
-}
+set::~set() {}
 
 bool set::has(int value) const
 {
@@ -42,8 +33,12 @@ void set::insert(int *array, int size)
 	if (!_bag || !array)
 		return;
 
-	for (int i = 0; i < size; i++)
+	int i = 0;
+	while (i < size)
+	{
 		insert(array[i]);
+		i++;
+	}
 }
 
 void set::print() const

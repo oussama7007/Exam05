@@ -2,7 +2,7 @@
 
 #include "searchable_bag.hpp"
 
-class set : public searchable_bag
+class set
 {
 private:
 	searchable_bag *_bag;
