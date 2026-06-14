@@ -1,10 +1,6 @@
 #include "bigint.hpp"
 
 
-
-
-
-
 #include "bigint.hpp"
 #include <cstdlib>
 
