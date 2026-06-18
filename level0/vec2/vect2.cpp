@@ -28,7 +28,7 @@ vect2::vect2(int x, int y)
 vect2::vect2(const vect2 &other)
 {
 	*this = other;
-}
+} 
 
 vect2 &vect2::operator=(const vect2 &other)
 {
