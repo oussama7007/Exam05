@@ -1,120 +1,58 @@
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 
-static int	count_neighbors(char *board, int w, int h, int x, int y)
+
+int main(int ac, char **av)
 {
-	int dx[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
-	int dy[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
-	int i = 0;
-	int nx, ny;
-	int count = 0;
+    if(ac != 4)
+        return 0;
+    int w = atoi(av[1]), h = atoi(av[2]), iter = atoi(av[3]);
+    if(w <= 0 || h <= 0)
+        return 0;
 
-	while (i < 8)
-	{
-		nx = x + dx[i];
-		ny = y + dy[i];
+    char board[h][w], tmp[h][w], c;
+    int x = 0, y = 0, p = 0;
+    
+    memset(board, 0, sizeof(board));
 
-		if (nx >= 0 && nx < w && ny >= 0 && ny < h)
-			count += board[ny * w + nx];
+    while(read(0, &c, 1) > 0)
+    {
+        if(c == 'w' && y > 0) y--;
+        if(c == 's' && y < h - 1) y++;
+        if(c == 'a' && x > 0) x--;
+        if(c == 'd' && x < w - 1) x++;
+        if(c == 'x') p = !p;
+        if(p) board[y][x] = 1;
+    }
 
-		i++;
-	}
-	return count;
-}
+    while(iter-- > 0)
+    {
+        for(int y = 0; y < h; y++)
+        {
+            for(int x = 0; x < w; x++)
+            {
+                int n = 0;
+                for(int dy = -1; dy <= 1; dy++)
+                {
+                    for(int dx = -1; dx <= 1; dx++)
+                    {
+                        if((dy != 0 || dx != 0) && y + dy >= 0 && y + dy < h && x + dx >= 0 && x + dx < w)
+                            n += board[y+dy][x+dx];
+                    }
+                }
+                tmp[y][x] = (board[y][x] && n == 2) || (n == 3); 
+            }
+        }
+        memcpy(board, tmp, sizeof(board));
+    }
 
-static void	update_board(char *board, char *tmp, int w, int h)
-{
-	int x, y;
-	int n;
-
-	y = 0;
-	while (y < h)
-	{
-		x = 0;
-		while (x < w)
-		{
-			n = count_neighbors(board, w, h, x, y);
-
-			tmp[y * w + x] = (board[y * w + x] && n == 2) || (n == 3);
-			x++;
-		}
-		y++;
-	}
-}
-
-static void	copy_board(char *board, char *tmp, int size)
-{
-	int i = 0;
-	while (i < size)
-	{
-		board[i] = tmp[i];
-		i++;
-	}
-}
-
-int	main(int ac, char **av)
-{
-	int w, h, iter;
-	int x, y;
-	char c;
-	char *board;
-	char *tmp;
-	int pen;
-
-	if (ac != 4)
-		return 1;
-
-	w = atoi(av[1]);
-	h = atoi(av[2]);
-	iter = atoi(av[3]);
-
-	if (w <= 0 || h <= 0 || iter < 0)
-		return 1;
-
-	board = calloc(w * h, sizeof(char));
-	tmp = calloc(w * h, sizeof(char));
-	if (!board || !tmp)
-		return 1;
-
-	x = 0;
-	y = 0;
-	pen = 0;
-
-	while (read(0, &c, 1) > 0)
-	{
-		if (c == 'w' && y > 0) y--;
-		else if (c == 's' && y < h - 1) y++;
-		else if (c == 'a' && x > 0) x--;
-		else if (c == 'd' && x < w - 1) x++;
-		else if (c == 'x') pen = !pen;
-
-		if (pen)
-			board[y * w + x] = 1;
-	}
-
-	while (iter--)
-	{
-		update_board(board, tmp, w, h);
-		copy_board(board, tmp, w * h);
-	}
-
-	y = 0;
-	while (y < h)
-	{
-		x = 0;
-		while (x < w)
-		{
-			if (board[y * w + x])
-				write(1, "O", 1);
-			else
-				write(1, " ", 1);
-			x++;
-		}
-		write(1, "\n", 1);
-		y++;
-	}
-
-	free(board);
-	free(tmp);
-	return 0;
+    for(int i = 0; i < h; i++)
+    {
+        for(int j = 0; j < w; j++)
+            putchar(board[i][j] ? '0' : ' ');
+        putchar('\n');
+    }
+    return 0;
 }
