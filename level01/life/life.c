@@ -48,18 +48,18 @@ int main(int ac, char **av)
     }
 
 
-for (int row = 0; row < h; row++)
-{
-    int alive = 0;
-    for (int col = 0; col < w; col++)
-        if (board[row * w + col]) { alive = 1; break; }
-
-    if (alive)
+    for (int row = 0; row < h; row++)
+    {
+        int start = -1;
         for (int col = 0; col < w; col++)
-            putchar(board[row * w + col] ? 'O' : ' ');
+            if (board[row * w + col]) { start = col; break; }
 
-    putchar('\n');
-}
+        if (start >= 0)
+            for (int col = start; col < w; col++)   // ← begins at first alive cell
+                putchar(board[row * w + col] ? 'O' : ' ');
+
+        putchar('\n');
+    }
     free(board);
     free(tmp);
     return 0;
